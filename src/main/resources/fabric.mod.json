@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "create_vehicular_works",
+  "version": "${version}",
+  "name": "Create Vehicular Works",
+  "description": "You ever wanted to drive a car made by you in minecraft? Now you can! \nthis mod along with create allows you to make vehicles and drive them in your world \nDisclaimer: this mod isnt or want to be a replacement of Valkryien Skies 2 or his addons Eureka or Clockwork",
+  "authors": [
+    "Miguel_dev"
+  ],
+  "contact": {
+    "sources": "https://github.com/Fabricators-of-Create/create-fabric-addon-template"
+  },
+  "license": "CC0",
+  "icon": "assets/modid/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.Miguel_dev.Create_Vehicular_Works.CVW_main"
+    ],
+    "client":[
+      "com.Miguel_dev.Create_Vehicular_Works.CVW_client"
+    ],
+    "fabric-datagen": [
+      "com.Miguel_dev.Create_Vehicular_Works.CVW_datagenerator"
+    ]
+  },
+  "mixins": [
+    "Create_Vehicular_Works.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric-api": ">=${fabric_api_version}",
+    "create": "${create_version}",
+    "minecraft": "${minecraft_version}"
+  }
+}
