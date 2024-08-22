@@ -14,7 +14,7 @@
   https://modrinth.com/mod/create-fabric/versions
 - fabric loader 0.15.7
   https://fabricmc.net
-- fabric api 0.92.0
+- fabric api 0.92.0 
   https://modrinth.com/mod/fabric-api/versions
 
 ## Help

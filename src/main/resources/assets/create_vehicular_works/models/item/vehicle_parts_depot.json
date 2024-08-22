@@ -1,0 +1,69 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "create_vehicular_works:block/vehicle_parts_depot_side",
+		"1": "create_vehicular_works:block/vehicle_parts_depot_bottom",
+		"2": "create_vehicular_works:block/vehicle_parts_depot_top",
+		"particle": "create_vehicular_works:block/vehicle_parts_depot_side"
+	},
+	"elements": [
+		{
+			"from": [-8, 0, -8],
+			"to": [24, 14, 24],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7, 8]},
+			"faces": {
+				"north": {"uv": [0, 5, 16, 16], "texture": "#0"},
+				"east": {"uv": [0, 5, 16, 16], "texture": "#0"},
+				"south": {"uv": [0, 5, 16, 16], "texture": "#0"},
+				"west": {"uv": [0, 5, 16, 16], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#1"}
+			}
+		},
+		{
+			"from": [-6, 14, -6],
+			"to": [22, 16, 22],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 15, 8]},
+			"faces": {
+				"north": {"uv": [1, 14, 15, 16], "texture": "#2"},
+				"east": {"uv": [1, 14, 15, 16], "texture": "#2"},
+				"south": {"uv": [1, 14, 15, 16], "texture": "#2"},
+				"west": {"uv": [1, 14, 15, 16], "texture": "#2"},
+				"up": {"uv": [1, 0, 15, 14], "texture": "#2"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#missing"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"thirdperson_lefthand": {
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"firstperson_righthand": {
+			"translation": [0, 1.75, -1.75],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"firstperson_lefthand": {
+			"translation": [0, 1.75, -1.75],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"ground": {
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"gui": {
+			"rotation": [45, 45, 0],
+			"translation": [0, 0.25, 0],
+			"scale": [0.35, 0.35, 0.35]
+		},
+		"head": {
+			"translation": [0, 12.5, 0],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"fixed": {
+			"rotation": [-90, 0, 0],
+			"scale": [0.5, 0.5, 0.5]
+		}
+	}
+}
