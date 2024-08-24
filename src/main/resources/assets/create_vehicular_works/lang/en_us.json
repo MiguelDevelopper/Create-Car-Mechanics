@@ -1,11 +1,14 @@
 {
-    "itemGroup.cvw_vehicle_parts": "Vehicle parts",
-    "itemGroup.cvw_blocks": "Blocks and machines",
+    "tab.create_vehicular_works.items": "Vehicle parts",
+    "tab.create_vehicular_works.blocks": "Blocks and machines",
 
     "block.create_vehicular_works.vehicle_parts_depot": "vehicle parts depot",
 
+    "item.create_vehicular_works.incomplete_piston": "Piston",
     "item.create_vehicular_works.piston": "Piston",
     "item.create_vehicular_works.piston_base": "piston base",
     "item.create_vehicular_works.piston_body": "piston body",
-    "item.create_vehicular_works.piston_head": "piston head"
+    "item.create_vehicular_works.piston_head": "piston head",
+
+    "tooltip.create_vehicular_works.VPM_tooltip": "station used to make the parts of the vehicles"
 }

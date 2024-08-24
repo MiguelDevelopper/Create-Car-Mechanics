@@ -1,0 +1,66 @@
+{
+    "type": "create:sequenced_assembly",
+    "ingredient": {
+      "item": "create_vehicular_works:piston_base"
+    },
+    "loops": 1,
+    "results": [
+      {
+        "item": "create_vehicular_works:piston"
+      }
+    ],
+    "sequence": [
+      {
+        "type": "create:deploying",
+        "ingredients": [
+          {
+            "item": "create_vehicular_works:incomplete_piston"
+          },
+          [
+            {
+              "item": "create_vehicular_works:piston_body"
+            }
+          ]
+        ],
+        "results": [
+          {
+            "item": "create_vehicular_works:incomplete_piston"
+          }
+        ]
+      },
+      {
+        "type": "create:deploying",
+        "ingredients": [
+          {
+            "item": "create_vehicular_works:incomplete_piston"
+          },
+          [
+            {
+              "item": "create_vehicular_works:piston_head"
+            }
+          ]
+        ],
+        "results": [
+          {
+            "item": "create_vehicular_works:incomplete_piston"
+          }
+        ]
+      },
+      {
+        "type": "create:pressing",
+        "ingredients": [
+          {
+            "item": "create_vehicular_works:incomplete_piston"
+          }
+        ],
+        "results": [
+          {
+            "item": "create_vehicular_works:incomplete_piston"
+          }
+        ]
+      }
+    ],
+    "transitionalItem": {
+      "item": "create_vehicular_works:incomplete_piston"
+    }
+  }
