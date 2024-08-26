@@ -7,12 +7,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 
 public class CVW_CreativeTabs {
-    public static final CreativeModeTab CVW_Vehicle_parts = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
+    public static final CreativeModeTab CVW_MainTab = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
     CVW_main.resourceLocation( "cvw_items"),
         FabricItemGroup.builder()
-            .title(Component.translatable("tab.create_vehicular_works.items"))
-            .icon(() -> CVW_Items.PISTON.asStack())
+            .title(Component.translatable("tab.create_vehicular_works.MainTab"))
+            .icon(() -> CVW_Blocks.VEHICLE_PARTS_MAKER.asStack())
             .displayItems((displayContext, entries) -> {
+                entries.accept(CVW_Blocks.VEHICLE_PARTS_MAKER);
                 entries.accept(CVW_Items.PISTON_BASE);
                 entries.accept(CVW_Items.PISTON_BODY);
                 entries.accept(CVW_Items.PISTON_HEAD);

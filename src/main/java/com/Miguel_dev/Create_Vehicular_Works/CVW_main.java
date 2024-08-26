@@ -22,9 +22,11 @@ public class CVW_main implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		CVW_CreativeTabs.register();
-		CVW_Items.register();
 		CVW_Blocks.register();
-
+		CVW_Items.register();
+		CVW_BlockEntityTypes.register();
+		CVW_RecipeTypes.register();
+		
 		REGISTRATE.register();
 	}
 

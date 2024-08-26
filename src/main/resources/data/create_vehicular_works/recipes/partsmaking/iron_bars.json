@@ -1,0 +1,15 @@
+{
+  "type": "create_vehicular_works:partsmaking",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_bars"
+    }
+  ],
+  "processingTime": 50,
+  "results": [
+    {
+      "count": 4,
+      "item": "create_vehicular_works:piston_body"
+    }
+  ]
+}

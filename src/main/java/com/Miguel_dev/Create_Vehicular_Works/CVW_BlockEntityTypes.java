@@ -1,20 +1,22 @@
 package com.Miguel_dev.Create_Vehicular_Works;
 
-import com.simibubi.create.content.kinetics.base.CutoutRotatingInstance;
-import com.simibubi.create.content.kinetics.base.HalfShaftInstance;
-import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import com.simibubi.create.content.kinetics.base.ShaftInstance;
+import static com.Miguel_dev.Create_Vehicular_Works.CVW_main.REGISTRATE;
+
+import com.Miguel_dev.Create_Vehicular_Works.content.kinetics.VehiclePartsMaker.VehiclePartsMakerBlockEntity;
+import com.Miguel_dev.Create_Vehicular_Works.content.kinetics.VehiclePartsMaker.VehiclePartsMakerInstance;
+import com.Miguel_dev.Create_Vehicular_Works.content.kinetics.VehiclePartsMaker.VehiclePartsMakerRenderer;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
-import static com.Miguel_dev.Create_Vehicular_Works.CVW_main.REGISTRATE;;
-
-
 public class CVW_BlockEntityTypes {
-    public static final BlockEntityEntry<VehiclePartsMakerEntity> VEHICLE_PARTS_MAKER = REGISTRATE
-        .blockEntity("vehicle_parts_maker", VehiclePartsMakerEntity::new)
-        .instance(() -> ShaftInstance::new)
-            .validBlocks(CVW_Blocks.VEHICLE_PARTS_MAKER)
-            .renderer(() -> EnergiserRenderer::new)
-            .register();
+    
+    public static final BlockEntityEntry<VehiclePartsMakerBlockEntity> VEHICLE_PARTS_MAKER = REGISTRATE
+        .blockEntity("vehicle_parts_maker",VehiclePartsMakerBlockEntity::new)
+        .instance(() -> VehiclePartsMakerInstance::new)
+        .validBlocks(CVW_Blocks.VEHICLE_PARTS_MAKER)
+        .renderer(() -> VehiclePartsMakerRenderer::new)
+        .register();
+	public static void register() {
+        CVW_main.LOGGER.info("Registering Block Entities for " + CVW_main.ID);
+    }
 
 }

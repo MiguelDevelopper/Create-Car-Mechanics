@@ -10,11 +10,10 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-//this code only have CVW_shapes as name the code is all from create mod (thanks for make all the source visible in github)
-
-public class CVW_shapes {
-
-    public static Builder shape(VoxelShape shape) {
+public class CVW_Shapes {
+	
+	// From create:AllShapes
+	public static Builder shape(VoxelShape shape) {
 		return new Builder(shape);
 	}
 
@@ -82,5 +81,4 @@ public class CVW_shapes {
 		}
 
 	}
-
 }
