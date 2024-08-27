@@ -1,7 +1,7 @@
 {
     "tab.create_vehicular_works.MainTab": "Create Vehicle Works",
     
-    "create_vehicular_works.recipe.assembly.vehicle_parts_making": "Vehicle Parts Making",
+    "recipe.create_vehicular_works.assembly.vehicle_parts_making": "Vehicle Parts Making",
 
     "block.create_vehicular_works.vehicle_parts_maker": "vehicle parts maker",
 
@@ -9,5 +9,7 @@
     "item.create_vehicular_works.piston": "Piston",
     "item.create_vehicular_works.piston_base": "piston base",
     "item.create_vehicular_works.piston_body": "piston body",
-    "item.create_vehicular_works.piston_head": "piston head"
+    "item.create_vehicular_works.piston_head": "piston head",
+
+    "subtitle.create_vehicular_works.vehicle_parts_maker_activate": "vehicle parts making"
 }

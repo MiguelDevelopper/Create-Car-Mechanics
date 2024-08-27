@@ -13,6 +13,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.Pro
 import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
 import com.simibubi.create.foundation.utility.Lang;
 
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.Component;
@@ -57,7 +58,7 @@ public class PartsMakingRecipe extends ProcessingRecipe<Container> implements IA
 	@Override
 	@Environment(EnvType.CLIENT)
 	public Component getDescriptionForAssembly() {
-		return Lang.translateDirect("create_vehicular_works.recipe.assembly.vehicle_parts_making");
+		return Lang.translateDirect("recipe.create_vehicular_works.assembly.vehicle_parts_making");
 	}
 
 	@Override

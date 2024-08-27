@@ -1,0 +1,11 @@
+{
+    "vehicle_parts_maker_activate": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "create_vehicular_works:vehicle_parts_maker_activate"
+      }
+    ],
+    "subtitle": "subtitle.create_vehicular_works.vehicle_parts_maker_activate"
+  }
+}

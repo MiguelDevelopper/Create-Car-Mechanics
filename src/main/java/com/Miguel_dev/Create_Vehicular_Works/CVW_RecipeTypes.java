@@ -71,6 +71,7 @@ public enum CVW_RecipeTypes implements IRecipeTypeInfo {
 	public static void register() {
 		ShapedRecipeUtil.setCraftingSize(9, 9);
 		// fabric: just load the class
+		CVW_main.LOGGER.info("Registering Recipe Types for " + CVW_main.ID);
 	}
 
 	@Override

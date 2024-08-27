@@ -13,10 +13,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import org.jetbrains.annotations.Nullable;
 
 import com.Miguel_dev.Create_Vehicular_Works.CVW_RecipeTypes;
+import com.Miguel_dev.Create_Vehicular_Works.CVW_SoundEvents;
+import com.Miguel_dev.Create_Vehicular_Works.CVW_main;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import com.simibubi.create.AllSoundEvents;
-import com.simibubi.create.content.kinetics.base.BlockBreakingKineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
 import com.simibubi.create.content.processing.recipe.ProcessingInventory;
@@ -27,8 +28,6 @@ import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringB
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.recipe.RecipeConditions;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
-import com.simibubi.create.foundation.utility.AbstractBlockBreakQueue;
-import com.simibubi.create.foundation.utility.TreeCutter;
 import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
@@ -51,7 +50,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -60,15 +58,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.block.BambooStalkBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CactusBlock;
-import net.minecraft.world.level.block.ChorusPlantBlock;
-import net.minecraft.world.level.block.KelpBlock;
-import net.minecraft.world.level.block.KelpPlantBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.StemGrownBlock;
-import net.minecraft.world.level.block.SugarCaneBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -84,6 +75,8 @@ public class VehiclePartsMakerBlockEntity extends KineticBlockEntity implements 
 	public ProcessingInventory inventory;
 	private int recipeIndex;
 	private FilteringBehaviour filtering;
+	//List<Recipe> recipes = this.level.getRecipeManager().getAllRecipesFor(CVW_RecipeTypes.simpleType(CVW_main.resourceLocation("create_vehicular_works")));
+	private boolean soundverifier = false;
 
 	private ItemStack playEvent;
 
@@ -138,18 +131,9 @@ public class VehiclePartsMakerBlockEntity extends KineticBlockEntity implements 
 			return;
 
 		if (!playEvent.isEmpty()) {
-			boolean isWood = false;
-			Item item = playEvent.getItem();
-			if (item instanceof BlockItem) {
-				Block block = ((BlockItem) item).getBlock();
-				isWood = block.getSoundType(block.defaultBlockState()) == SoundType.WOOD;
-			}
 			spawnEventParticles(playEvent);
 			playEvent = ItemStack.EMPTY;
-			if (!isWood)
-				AllSoundEvents.SAW_ACTIVATE_STONE.playAt(level, worldPosition, 3, 1, true);
-			else
-				AllSoundEvents.SAW_ACTIVATE_WOOD.playAt(level, worldPosition, 3, 1, true);
+			CVW_SoundEvents.VEHICLE_PARTS_MAKER_ACTIVATE.playAt(level, worldPosition, 3, 1, true);
 			return;
 		}
 	}
@@ -337,10 +321,6 @@ public class VehiclePartsMakerBlockEntity extends KineticBlockEntity implements 
 			List<ItemStack> results = new LinkedList<ItemStack>();
 			if (recipe instanceof PartsMakingRecipe)
 				results = ((PartsMakingRecipe) recipe).rollResults();
-			else if (recipe.getType() == woodcuttingRecipeType.get())
-				results.add(recipe.getResultItem(level.registryAccess())
-					.copy());
-
 			for (int i = 0; i < results.size(); i++) {
 				ItemStack stack = results.get(i);
 				ItemHelper.addToList(stack, list);
@@ -412,6 +392,7 @@ public class VehiclePartsMakerBlockEntity extends KineticBlockEntity implements 
 			recipeIndex++;
 			if (recipeIndex >= recipes.size())
 				recipeIndex = 0;
+			soundverifier = valid;
 		}
 
 		Recipe<?> recipe = recipes.get(recipeIndex);
@@ -423,5 +404,10 @@ public class VehiclePartsMakerBlockEntity extends KineticBlockEntity implements 
 		inventory.recipeDuration = inventory.remainingTime;
 		inventory.appliedRecipe = false;
 		sendData();
+
+		/*for (int i = 0; i < recipelist.size(); i++){
+			CVW_main.LOGGER.info(recipelist.get(i).toString());
+		} */
+		
 	}
 }

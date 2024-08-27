@@ -14,7 +14,7 @@
 		{
 			"from": [0, 2, 1],
 			"to": [16, 12, 15],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7, 8]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [0, 4, 16, 14], "texture": "#gearbox"},
 				"east": {"uv": [1, 2, 15, 14], "texture": "#andesite_casing"},
@@ -27,7 +27,7 @@
 		{
 			"from": [0, 12, 3],
 			"to": [16, 13, 15],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 18, 8]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [0, 2, 16, 3], "texture": "#vehicle_parts_maker_top"},
 				"east": {"uv": [2, 13, 14, 14], "texture": "#vehicle_parts_maker_top"},
@@ -40,7 +40,7 @@
 		{
 			"from": [14, 2, 0],
 			"to": [16, 12, 1],
-			"rotation": {"angle": 0, "axis": "y", "origin": [15, 7, 0.5]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [0, 4, 2, 14], "texture": "#gearbox_top"},
 				"east": {"uv": [0, 2, 1, 14], "texture": "#andesite_casing"},
@@ -53,7 +53,7 @@
 		{
 			"from": [0, 2, 0],
 			"to": [2, 12, 1],
-			"rotation": {"angle": 0, "axis": "y", "origin": [1, 7, 0.5]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [14, 4, 16, 14], "texture": "#gearbox"},
 				"east": {"uv": [15, 4, 14, 14], "texture": "#gearbox"},
@@ -66,7 +66,7 @@
 		{
 			"from": [0, 0, 0],
 			"to": [16, 2, 16],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 1, 15.5]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 16, 2], "texture": "#gearbox"},
 				"east": {"uv": [0, 14, 16, 16], "texture": "#gearbox"},
@@ -79,7 +79,7 @@
 		{
 			"from": [14, 2, 15],
 			"to": [16, 12, 16],
-			"rotation": {"angle": 0, "axis": "y", "origin": [15, 7, 15.5]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 2, 12], "texture": "#missing"},
 				"east": {"uv": [0, 2, 1, 14], "texture": "#andesite_casing"},
@@ -92,7 +92,7 @@
 		{
 			"from": [0, 2, 15],
 			"to": [2, 12, 16],
-			"rotation": {"angle": 0, "axis": "y", "origin": [1, 7, 15.5]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 2, 12], "texture": "#missing"},
 				"east": {"uv": [1, 4, 2, 14], "texture": "#gearbox"},
@@ -105,7 +105,7 @@
 		{
 			"from": [6.5, 12, 1],
 			"to": [7.5, 15.5, 2],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7, 12, 1.5]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 1, 3.5], "texture": "#gearbox"},
 				"east": {"uv": [0, 0, 1, 3.5], "texture": "#gearbox_top"},
@@ -118,7 +118,7 @@
 		{
 			"from": [8.5, 12, 1],
 			"to": [9.5, 15.5, 2],
-			"rotation": {"angle": 0, "axis": "y", "origin": [9, 12, 1.5]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 1, 3.5], "texture": "#gearbox"},
 				"east": {"uv": [0, 0, 1, 3.5], "texture": "#andesite_casing"},
@@ -132,7 +132,7 @@
 			"name": "Axis",
 			"from": [6, 6, 0],
 			"to": [10, 10, 16],
-			"rotation": {"angle": 0, "axis": "x", "origin": [8, 8, 8]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [6, 6, 10, 10], "rotation": 180, "texture": "#axis_top"},
 				"east": {"uv": [6, 0, 10, 16], "rotation": 270, "texture": "#axis"},
@@ -144,9 +144,9 @@
 		},
 		{
 			"name": "part_3",
-			"from": [1, 16.79661, 1.07597],
-			"to": [2, 19.79661, 2.07597],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [1.5, 19.71082, 1.57597]},
+			"from": [1, 18.62997, 4.70711],
+			"to": [2, 21.62997, 5.70711],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 1, 3], "texture": "#andesite_casing"},
 				"east": {"uv": [0, 0, 1, 3], "texture": "#andesite_casing"},
@@ -160,7 +160,7 @@
 			"name": "part_2",
 			"from": [1, 16, 1],
 			"to": [2, 20, 2],
-			"rotation": {"angle": 0, "axis": "y", "origin": [1.5, 16, 1.5]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 1, 4], "texture": "#andesite_casing"},
 				"east": {"uv": [0, 0, 1, 4], "texture": "#andesite_casing"},
@@ -174,7 +174,7 @@
 			"name": "part_1",
 			"from": [1, 12, 1],
 			"to": [2, 16, 2],
-			"rotation": {"angle": 0, "axis": "y", "origin": [1.5, 12, 1.5]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 1, 4], "texture": "#andesite_casing"},
 				"east": {"uv": [0, 0, 1, 4], "texture": "#andesite_casing"},
@@ -185,9 +185,9 @@
 			}
 		},
 		{
-			"from": [0.75, 16.06306, 2.12067],
-			"to": [2.25, 17.06306, 3.62067],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [1.5, 16.56306, 2.87067]},
+			"from": [0.75, 17.64057, 4.44867],
+			"to": [2.25, 18.64057, 5.94867],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [12, 3, 15, 4], "texture": "#vehicle_parts_maker_top"},
 				"east": {"uv": [12, 3, 15, 4], "texture": "#vehicle_parts_maker_top"},
@@ -198,9 +198,9 @@
 			}
 		},
 		{
-			"from": [1, 15.06306, 2.37067],
-			"to": [2, 16.06306, 3.37067],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [1.5, 16.56306, 2.87067]},
+			"from": [1, 16.64057, 4.69867],
+			"to": [2, 17.64057, 5.69867],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [13, 3, 15, 4], "texture": "#vehicle_parts_maker_top"},
 				"east": {"uv": [13, 3, 15, 4], "texture": "#vehicle_parts_maker_top"},
@@ -211,9 +211,9 @@
 			}
 		},
 		{
-			"from": [1.25, 14.06306, 2.62067],
-			"to": [1.75, 15.06306, 3.12067],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [1.5, 16.56306, 2.87067]},
+			"from": [1.25, 15.64057, 4.94867],
+			"to": [1.75, 16.64057, 5.44867],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [14, 3, 15, 4], "texture": "#vehicle_parts_maker_top"},
 				"east": {"uv": [14, 3, 15, 4], "texture": "#vehicle_parts_maker_top"},
@@ -225,9 +225,9 @@
 		},
 		{
 			"name": "saw",
-			"from": [14.5, 14.9609, 2.08582],
-			"to": [14.5, 16.9609, 4.08582],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [14.5, 15.9609, 3.08582]},
+			"from": [14.5, 16.50191, 4.167],
+			"to": [14.5, 18.50191, 6.167],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 0, 2], "texture": "#missing"},
 				"east": {"uv": [0, 0, 2, 2], "texture": "#andesite_casing"},
@@ -239,9 +239,9 @@
 		},
 		{
 			"name": "saw_holder",
-			"from": [14.25, 15.61687, 2.69015],
-			"to": [14.75, 17.11687, 3.19015],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [14.5, 16.36687, 2.94015]},
+			"from": [14.25, 17.18272, 4.93778],
+			"to": [14.75, 18.68272, 5.43778],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [2, 1.25, 2.5, 2.75], "rotation": 180, "texture": "#andesite_casing"},
 				"east": {"uv": [2, 1.25, 2.5, 2.75], "rotation": 180, "texture": "#andesite_casing"},
@@ -253,9 +253,9 @@
 		},
 		{
 			"name": "Part_3",
-			"from": [14, 16.79661, 1.05097],
-			"to": [15, 19.79661, 2.05097],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [14.5, 19.71082, 1.55097]},
+			"from": [14, 18.63954, 4.68402],
+			"to": [15, 21.63954, 5.68402],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 1, 3], "texture": "#andesite_casing"},
 				"east": {"uv": [0, 0, 1, 3], "texture": "#gearbox"},
@@ -269,7 +269,7 @@
 			"name": "part_2",
 			"from": [14, 16, 1],
 			"to": [15, 20, 2],
-			"rotation": {"angle": 0, "axis": "y", "origin": [14.5, 16, 1.5]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 1, 4], "texture": "#andesite_casing"},
 				"east": {"uv": [0, 0, 1, 4], "texture": "#andesite_casing"},
@@ -283,7 +283,7 @@
 			"name": "part_1",
 			"from": [14, 12, 1],
 			"to": [15, 16, 2],
-			"rotation": {"angle": 0, "axis": "y", "origin": [14.5, 12, 1.5]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 1, 4], "texture": "#andesite_casing"},
 				"east": {"uv": [0, 0, 1, 4], "texture": "#andesite_casing"},
@@ -297,7 +297,7 @@
 			"name": "body",
 			"from": [7.5, 14.5, 1],
 			"to": [8.5, 23.2, 2],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 15, 1.5]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [4, 4, 5, 12.7], "texture": "#andesite_casing"},
 				"east": {"uv": [4, 4, 5, 12.7], "texture": "#andesite_casing"},
@@ -311,7 +311,7 @@
 			"name": "head",
 			"from": [7, 21, -1],
 			"to": [9, 23, 4],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7.75, 15, 1.5]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11.5, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 2, 2], "texture": "#gearbox"},
 				"east": {"uv": [0, 0, 5, 2], "texture": "#gearbox"},
@@ -345,15 +345,17 @@
 			"scale": [0.25, 0.25, 0.25]
 		},
 		"gui": {
-			"rotation": [45, 45, 0],
-			"translation": [0, 0.25, 0],
+			"rotation": [32.5, 45, 0],
+			"translation": [0, -0.25, 0],
 			"scale": [0.6, 0.6, 0.6]
 		},
 		"head": {
 			"rotation": [0, 180, 0]
 		},
 		"fixed": {
-			"rotation": [-90, -180, 0]
+			"rotation": [-90, -180, 0],
+			"translation": [0, 0, -0.25],
+			"scale": [0.5, 0.5, 0.5]
 		}
 	},
 	"groups": [

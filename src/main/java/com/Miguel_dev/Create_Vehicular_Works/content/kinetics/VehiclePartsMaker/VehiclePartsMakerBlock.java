@@ -7,6 +7,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.Miguel_dev.Create_Vehicular_Works.CVW_BlockEntityTypes;
 import com.Miguel_dev.Create_Vehicular_Works.CVW_Blocks;
+import com.Miguel_dev.Create_Vehicular_Works.CVW_RecipeTypes;
+import com.Miguel_dev.Create_Vehicular_Works.CVW_main;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.kinetics.base.DirectionalAxisKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
@@ -27,6 +29,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -49,6 +52,8 @@ public class VehiclePartsMakerBlock extends DirectionalAxisKineticBlock implemen
     public static final BooleanProperty FLIPPED = BooleanProperty.create("flipped");
 
 	private static final int placementHelperId = PlacementHelpers.register(new PlacementHelper());
+
+	
 
 	public VehiclePartsMakerBlock(Properties properties) {
 		super(properties);
@@ -119,6 +124,7 @@ public class VehiclePartsMakerBlock extends DirectionalAxisKineticBlock implemen
 	@Override
 	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn,
 		BlockHitResult hit) {
+		
 		ItemStack heldItem = player.getItemInHand(handIn);
 		IPlacementHelper placementHelper = PlacementHelpers.get(placementHelperId);
 		if (!player.isShiftKeyDown() && player.mayBuild()) {
@@ -150,6 +156,7 @@ public class VehiclePartsMakerBlock extends DirectionalAxisKineticBlock implemen
 
 	@Override
 	public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn) {
+
 		if (entityIn instanceof ItemEntity)
 			return;
 		if (!new AABB(pos).deflate(.1f)
@@ -163,6 +170,7 @@ public class VehiclePartsMakerBlock extends DirectionalAxisKineticBlock implemen
 
 	@Override
 	public void updateEntityAfterFallOn(BlockGetter worldIn, Entity entityIn) {
+		
 		super.updateEntityAfterFallOn(worldIn, entityIn);
 		if (!(entityIn instanceof ItemEntity))
 			return;
@@ -226,6 +234,7 @@ public class VehiclePartsMakerBlock extends DirectionalAxisKineticBlock implemen
 		@Override
 		public PlacementOffset getOffset(Player player, Level world, BlockState state, BlockPos pos,
 			BlockHitResult ray) {
+
 			List<Direction> directions = IPlacementHelper.orderedByDistanceExceptAxis(pos, ray.getLocation(),
 				state.getValue(FACING)
 					.getAxis(),
