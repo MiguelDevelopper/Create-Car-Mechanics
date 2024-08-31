@@ -5,6 +5,7 @@ import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 
 import com.Miguel_dev.Create_Vehicular_Works.content.kinetics.VehiclePartsMaker.VehiclePartsMakerBlock;
+import com.simibubi.create.AllTags.AllBlockTags;
 //import com.Miguel_dev.Create_Vehicular_Works.content.kinetics.VehiclePartsMaker.VehiclePartsMakerGenerator;
 import com.simibubi.create.AllTags.AllItemTags;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
@@ -18,17 +19,13 @@ public class CVW_Blocks {
 
 	public static final BlockEntry<VehiclePartsMakerBlock> VEHICLE_PARTS_MAKER = REGISTRATE.block("vehicle_parts_maker", VehiclePartsMakerBlock::new)
 		.initialProperties(SharedProperties::stone)
-		.addLayer(() -> RenderType::cutoutMipped)
-		.properties(p -> p.mapColor(MapColor.PODZOL))
-		.transform(axeOrPickaxe())
-		//.blockstate(new VehiclePartsMakerGenerator()::generate)
-		.transform(BlockStressDefaults.setImpact(4.0))
-		.addLayer(() -> RenderType::cutoutMipped)
+		.transform(BlockStressDefaults.setImpact(8/*Config.ROLLING_MILL_STRESS.get()*/))
+		.tag(AllBlockTags.SAFE_NBT.tag) //Dono what this tag means (contraption safe?).
 		.item()
-		.tag(AllItemTags.CONTRAPTION_CONTROLLED.tag)
 		.transform(customItemModel())
 		.register();
-	
+
+
 	public static void register() { 
 		CVW_main.LOGGER.info("Registering blocks for " + CVW_main.ID);
 	 }

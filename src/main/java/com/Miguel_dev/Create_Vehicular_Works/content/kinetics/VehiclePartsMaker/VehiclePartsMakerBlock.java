@@ -1,176 +1,114 @@
 package com.Miguel_dev.Create_Vehicular_Works.content.kinetics.VehiclePartsMaker;
 
-import java.util.List;
-import java.util.function.Predicate;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import com.Miguel_dev.Create_Vehicular_Works.CVW_BlockEntityTypes;
-import com.Miguel_dev.Create_Vehicular_Works.CVW_Blocks;
-import com.Miguel_dev.Create_Vehicular_Works.CVW_RecipeTypes;
-import com.Miguel_dev.Create_Vehicular_Works.CVW_main;
-import com.simibubi.create.AllShapes;
-import com.simibubi.create.content.kinetics.base.DirectionalAxisKineticBlock;
+import com.Miguel_dev.Create_Vehicular_Works.CVW_Shapes;
+import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.placement.IPlacementHelper;
-import com.simibubi.create.foundation.placement.PlacementHelpers;
-import com.simibubi.create.foundation.placement.PlacementOffset;
+import com.simibubi.create.foundation.utility.Iterate;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
-import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition.Builder;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
-public class VehiclePartsMakerBlock extends DirectionalAxisKineticBlock implements IBE<VehiclePartsMakerBlockEntity> {
-    public static final BooleanProperty FLIPPED = BooleanProperty.create("flipped");
+import javax.annotation.Nonnull;
 
-	private static final int placementHelperId = PlacementHelpers.register(new PlacementHelper());
+import org.jetbrains.annotations.NotNull;
 
-	
+
+public class VehiclePartsMakerBlock extends HorizontalKineticBlock implements IBE<VehiclePartsMakerBlockEntity> {
+    
+	public static final VoxelShape VEHICLE_PARTS_MAKER_SHAPE = CVW_Shapes.shape(0,0,0,16,12,16).build();
+
+
 
 	public VehiclePartsMakerBlock(Properties properties) {
 		super(properties);
 	}
 
+	
 	@Override
-	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
-		super.createBlockStateDefinition(builder.add(FLIPPED));
+	public @NotNull VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter worldIn, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
+		return VEHICLE_PARTS_MAKER_SHAPE;
 	}
-
+	
 	@Override
-	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		BlockState stateForPlacement = super.getStateForPlacement(context);
-		Direction facing = stateForPlacement.getValue(FACING);
-		return stateForPlacement.setValue(FLIPPED, facing.getAxis() == Axis.Y && context.getHorizontalDirection()
-			.getAxisDirection() == AxisDirection.POSITIVE);
-	}
-
-	@Override
-	public BlockState getRotatedBlockState(BlockState originalState, Direction targetedFace) {
-		BlockState newState = super.getRotatedBlockState(originalState, targetedFace);
-		if (newState.getValue(FACING)
-			.getAxis() != Axis.Y)
-			return newState;
-		if (targetedFace.getAxis() != Axis.Y)
-			return newState;
-		if (!originalState.getValue(AXIS_ALONG_FIRST_COORDINATE))
-			newState = newState.cycle(FLIPPED);
-		return newState;
-	}
-
-	@Override
-	public BlockState rotate(BlockState state, Rotation rot) {
-		BlockState newState = super.rotate(state, rot);
-		if (state.getValue(FACING)
-			.getAxis() != Axis.Y)
-			return newState;
-
-		if (rot.ordinal() % 2 == 1 && (rot == Rotation.CLOCKWISE_90) != state.getValue(AXIS_ALONG_FIRST_COORDINATE))
-			newState = newState.cycle(FLIPPED);
-		if (rot == Rotation.CLOCKWISE_180)
-			newState = newState.cycle(FLIPPED);
-
-		return newState;
-	}
-
-	@Override
-	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		BlockState newState = super.mirror(state, mirrorIn);
-		if (state.getValue(FACING)
-			.getAxis() != Axis.Y)
-			return newState;
-
-		boolean alongX = state.getValue(AXIS_ALONG_FIRST_COORDINATE);
-		if (alongX && mirrorIn == Mirror.FRONT_BACK)
-			newState = newState.cycle(FLIPPED);
-		if (!alongX && mirrorIn == Mirror.LEFT_RIGHT)
-			newState = newState.cycle(FLIPPED);
-
-		return newState;
-	}
-
-	@Override
-	public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-		return AllShapes.CASING_12PX.get(state.getValue(FACING));
-	}
-
-	@Override
-	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn,
-		BlockHitResult hit) {
-		
-		ItemStack heldItem = player.getItemInHand(handIn);
-		IPlacementHelper placementHelper = PlacementHelpers.get(placementHelperId);
-		if (!player.isShiftKeyDown() && player.mayBuild()) {
-			if (placementHelper.matchesItem(heldItem) && placementHelper.getOffset(player, worldIn, state, pos, hit)
-				.placeInWorld(worldIn, (BlockItem) heldItem.getItem(), player, handIn, hit)
-				.consumesAction())
-				return InteractionResult.SUCCESS;
-		}
-
-		if (player.isSpectator() || !player.getItemInHand(handIn)
-			.isEmpty())
+	public @NotNull InteractionResult use(@Nonnull BlockState state, @Nonnull Level worldIn, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand handIn, @Nonnull BlockHitResult hit) {
+		if (!player.getItemInHand(handIn).isEmpty())
 			return InteractionResult.PASS;
-		if (state.getOptionalValue(FACING)
-			.orElse(Direction.WEST) != Direction.UP)
-			return InteractionResult.PASS;
-
-		return onBlockEntityUse(worldIn, pos, be -> {
-			for (int i = 0; i < be.inventory.getSlotCount(); i++) {
-				ItemStack heldItemStack = be.inventory.getStackInSlot(i);
-				if (!worldIn.isClientSide && !heldItemStack.isEmpty())
-					player.getInventory()
-						.placeItemBackInInventory(heldItemStack);
-			}
-			be.inventory.clear();
-			be.notifyUpdate();
+		if (worldIn.isClientSide)
 			return InteractionResult.SUCCESS;
+
+		withBlockEntityDo(worldIn, pos, vehiclepartsmaker -> {
+			boolean emptyOutput = true;
+			ItemStackHandler inv = vehiclepartsmaker.inventory;
+			for (int slot = 0; slot < inv.getSlotCount(); slot++) {
+				ItemStack stackInSlot = inv.getStackInSlot(slot);
+				if (!stackInSlot.isEmpty())
+					emptyOutput = false;
+				player.getInventory().placeItemBackInInventory(stackInSlot);
+				inv.setStackInSlot(slot, ItemStack.EMPTY);
+			}
+
+			if (emptyOutput) {
+				inv = vehiclepartsmaker.inventory;
+				for (int slot = 0; slot < inv.getSlotCount(); slot++) {
+					player.getInventory().placeItemBackInInventory(inv.getStackInSlot(slot));
+					inv.setStackInSlot(slot, ItemStack.EMPTY);
+				}
+			}
+
+			vehiclepartsmaker.setChanged();
+			vehiclepartsmaker.sendData();
 		});
+
+		return InteractionResult.SUCCESS;
 	}
 
-	@Override
-	public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn) {
+	/*@Override
+	public void updateEntityAfterFallOn(@Nonnull BlockGetter worldIn, @Nonnull Entity entityIn) {
+		super.updateEntityAfterFallOn(worldIn, entityIn);
 
-		if (entityIn instanceof ItemEntity)
+		if (entityIn.level().isClientSide)
 			return;
-		if (!new AABB(pos).deflate(.1f)
-			.intersects(entityIn.getBoundingBox()))
+		if (!(entityIn instanceof ItemEntity))
 			return;
-		withBlockEntityDo(worldIn, pos, be -> {
-			if (be.getSpeed() == 0)
-				return;
-		});
-	}
+		if (!entityIn.isAlive())
+			return;
+
+		VehiclePartsMakerBlockEntity vehiclepartsmaker = null;
+		for (BlockPos pos : Iterate.hereAndBelow(entityIn.blockPosition())) {
+			vehiclepartsmaker = getBlockEntity(worldIn, pos);
+		}
+		if (vehiclepartsmaker == null)
+			return;
+
+		BlockPos pos = entityIn.blockPosition().below();
+		VehiclePartsMakerBlockEntity be = (VehiclePartsMakerBlockEntity) entityIn.level().getBlockEntity(pos);
+		if (be == null) return;
+		if (be.getSpeed() == 0) return;
+		be.insertItem((ItemEntity) entityIn);
+
+	}*/
 
 	@Override
 	public void updateEntityAfterFallOn(BlockGetter worldIn, Entity entityIn) {
-		
 		super.updateEntityAfterFallOn(worldIn, entityIn);
 		if (!(entityIn instanceof ItemEntity))
 			return;
@@ -185,27 +123,36 @@ public class VehiclePartsMakerBlock extends DirectionalAxisKineticBlock implemen
 		});
 	}
 
-	public static boolean isHorizontal(BlockState state) {
-		return state.getValue(FACING)
-			.getAxis()
-			.isHorizontal();
+	/*@Override
+	public void onRemove(BlockState state, @NotNull Level worldIn, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
+		if (state.hasBlockEntity() && state.getBlock() != newState.getBlock()) {
+			withBlockEntityDo(worldIn, pos, te -> {
+				ItemHelper.dropContents(worldIn, pos, te.);
+				ItemHelper.dropContents(worldIn, pos, te.outputInv);
+			});
+
+			worldIn.removeBlockEntity(pos);
+		}
+	}*/
+
+	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		Direction prefferedSide = getPreferredHorizontalFacing(context);
+		if (prefferedSide != null)
+			return defaultBlockState().setValue(HORIZONTAL_FACING, prefferedSide);
+		return super.getStateForPlacement(context);
 	}
 
 	@Override
 	public Axis getRotationAxis(BlockState state) {
-		return isHorizontal(state) ? state.getValue(FACING)
-			.getAxis() : super.getRotationAxis(state);
+		return state.getValue(HORIZONTAL_FACING)
+			.getAxis();
 	}
 
 	@Override
 	public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
-		return isHorizontal(state) ? face == state.getValue(FACING)
-			.getOpposite() : super.hasShaftTowards(world, pos, state, face);
-	}
-
-	@Override
-	public Class<VehiclePartsMakerBlockEntity> getBlockEntityClass() {
-		return VehiclePartsMakerBlockEntity.class;
+		return face.getAxis() == state.getValue(HORIZONTAL_FACING)
+			.getAxis();
 	}
 
 	@Override
@@ -214,43 +161,12 @@ public class VehiclePartsMakerBlock extends DirectionalAxisKineticBlock implemen
 	}
 
 	@Override
-	public boolean isPathfindable(BlockState state, BlockGetter reader, BlockPos pos, PathComputationType type) {
-		return false;
+	public Class<VehiclePartsMakerBlockEntity> getBlockEntityClass() {
+		return VehiclePartsMakerBlockEntity.class;
 	}
 
-	@MethodsReturnNonnullByDefault
-	private static class PlacementHelper implements IPlacementHelper {
-
-		@Override
-		public Predicate<ItemStack> getItemPredicate() {
-			return CVW_Blocks.VEHICLE_PARTS_MAKER::isIn;
-		}
-
-		@Override
-		public Predicate<BlockState> getStatePredicate() {
-			return state -> CVW_Blocks.VEHICLE_PARTS_MAKER.has(state);
-		}
-
-		@Override
-		public PlacementOffset getOffset(Player player, Level world, BlockState state, BlockPos pos,
-			BlockHitResult ray) {
-
-			List<Direction> directions = IPlacementHelper.orderedByDistanceExceptAxis(pos, ray.getLocation(),
-				state.getValue(FACING)
-					.getAxis(),
-				dir -> world.getBlockState(pos.relative(dir))
-					.canBeReplaced());
-
-			if (directions.isEmpty())
-				return PlacementOffset.fail();
-			else {
-				return PlacementOffset.success(pos.relative(directions.get(0)),
-					s -> s.setValue(FACING, state.getValue(FACING))
-					.setValue(AXIS_ALONG_FIRST_COORDINATE, state.getValue(AXIS_ALONG_FIRST_COORDINATE))
-					.setValue(FLIPPED, state.getValue(FLIPPED)));
-			}
-		}
-
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return CVW_BlockEntityTypes.VEHICLE_PARTS_MAKER.create(pos, state);
 	}
-
 }

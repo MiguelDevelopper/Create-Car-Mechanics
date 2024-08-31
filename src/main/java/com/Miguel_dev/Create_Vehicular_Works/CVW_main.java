@@ -1,6 +1,8 @@
 package com.Miguel_dev.Create_Vehicular_Works;
 
 import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.simibubi.create.foundation.ponder.FabricPonderProcessing;
+
 import java.util.Random;
 
 import net.fabricmc.api.ModInitializer;
@@ -19,12 +21,12 @@ public class CVW_main implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		CVW_Blocks.register();
+		CVW_BlockEntityTypes.register();
+		CVW_Items.register();
+		CVW_RecipeTypes.register();
 		CVW_SoundEvents.prepare();
 		CVW_CreativeTabs.register();
-		CVW_Blocks.register();
-		CVW_Items.register();
-		CVW_BlockEntityTypes.register();
-		CVW_RecipeTypes.register();
 		
 		REGISTRATE.register();
 	}

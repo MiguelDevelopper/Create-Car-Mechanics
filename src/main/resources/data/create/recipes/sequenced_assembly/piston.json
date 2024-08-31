@@ -47,17 +47,13 @@
         ]
       },
       {
-        "type": "create:pressing",
-        "ingredients": [
-          {
-            "item": "create_vehicular_works:incomplete_piston"
-          }
-        ],
-        "results": [
-          {
-            "item": "create_vehicular_works:incomplete_piston"
-          }
-        ]
+        "type":"create_vehicular_works:partsmaking",
+        "input": {
+              "item": "create_vehicular_works:incomplete_piston"
+        },
+        "result": {
+          "item": "create_vehicular_works:incomplete_piston"
+        }
       }
     ],
     "transitionalItem": {

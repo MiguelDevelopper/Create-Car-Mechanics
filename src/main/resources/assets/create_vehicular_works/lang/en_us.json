@@ -1,15 +1,18 @@
 {
     "tab.create_vehicular_works.MainTab": "Create Vehicle Works",
     
-    "recipe.create_vehicular_works.assembly.vehicle_parts_making": "Vehicle Parts Making",
+    "create_vehicular_works.recipe.partsmaking": "Vehicle Parts Making",
+    "create_vehicular_works.recipe.partsmaking.secuence": "Making Parts",
 
-    "block.create_vehicular_works.vehicle_parts_maker": "vehicle parts maker",
+    "block.create_vehicular_works.vehicle_parts_maker": "Vehicle Parts Maker",
 
-    "item.create_vehicular_works.incomplete_piston": "Piston",
+    "item.create_vehicular_works.piston_base_trim": "Piston Base Trim",
+    "item.create_vehicular_works.piston_head_trim": "Piston Head Trim",
+    "item.create_vehicular_works.piston_base": "Piston Base",
+    "item.create_vehicular_works.piston_body": "Piston Body",
+    "item.create_vehicular_works.piston_head": "Piston Head",
+    "item.create_vehicular_works.incomplete_piston": "Incomplete Piston",
     "item.create_vehicular_works.piston": "Piston",
-    "item.create_vehicular_works.piston_base": "piston base",
-    "item.create_vehicular_works.piston_body": "piston body",
-    "item.create_vehicular_works.piston_head": "piston head",
 
-    "subtitle.create_vehicular_works.vehicle_parts_maker_activate": "vehicle parts making"
+    "subtitle.create_vehicular_works.vehicle_parts_maker_activate": "Vehicle Parts Making"
 }

@@ -1,38 +1,29 @@
 package com.Miguel_dev.Create_Vehicular_Works.content.kinetics.VehiclePartsMaker;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-
-import org.jetbrains.annotations.Nullable;
 
 import com.Miguel_dev.Create_Vehicular_Works.CVW_RecipeTypes;
 import com.Miguel_dev.Create_Vehicular_Works.CVW_SoundEvents;
 import com.Miguel_dev.Create_Vehicular_Works.CVW_main;
-import com.google.common.base.Suppliers;
+import com.Miguel_dev.Create_Vehicular_Works.recipes.partsmaking.PartsMakingRecipe;
 import com.google.common.collect.ImmutableList;
+import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
+import com.simibubi.create.content.logistics.chute.SmartChuteFilterSlotPositioning;
 import com.simibubi.create.content.processing.recipe.ProcessingInventory;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
-import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.recipe.RecipeConditions;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
 import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.infrastructure.config.AllConfigs;
-
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
 import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -40,16 +31,14 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -57,32 +46,34 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 public class VehiclePartsMakerBlockEntity extends KineticBlockEntity implements SidedStorageBlockEntity {
-    private static final Object partsmakingRecipesKey = new Object();
-	public static final Supplier<RecipeType<?>> woodcuttingRecipeType =
-		Suppliers.memoize(() -> BuiltInRegistries.RECIPE_TYPE.get(new ResourceLocation("druidcraft", "woodcutting")));
-	
+
+	private static final Object rollingRecipesKey = new Object();
 	public ProcessingInventory inventory;
 	private int recipeIndex;
-	private FilteringBehaviour filtering;
-	//List<Recipe> recipes = this.level.getRecipeManager().getAllRecipesFor(CVW_RecipeTypes.simpleType(CVW_main.resourceLocation("create_vehicular_works")));
-	private boolean soundverifier = false;
-
 	private ItemStack playEvent;
+	FilteringBehaviour filtering;
 
-	public VehiclePartsMakerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+
+	public VehiclePartsMakerBlockEntity(BlockEntityType<? extends VehiclePartsMakerBlockEntity> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
-		inventory = new ProcessingInventory(this::start).withSlotLimit(!AllConfigs.server().recipes.bulkCutting.get());
+		inventory = new ProcessingInventory(this::start);
 		inventory.remainingTime = -1;
 		recipeIndex = 0;
 		playEvent = ItemStack.EMPTY;
@@ -91,56 +82,13 @@ public class VehiclePartsMakerBlockEntity extends KineticBlockEntity implements 
 	@Override
 	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
 		super.addBehaviours(behaviours);
-		filtering = new FilteringBehaviour(this, new VehiclePartsMakerFilterSlot()).forRecipes();
-		behaviours.add(filtering);
 		behaviours.add(new DirectBeltInputBehaviour(this));
-		registerAwardables(behaviours, AllAdvancements.SAW_PROCESSING); //<- REMEMBER TO ADD ADVANCEMENT
-	}
-
-	@Override
-	public void write(CompoundTag compound, boolean clientPacket) {
-		compound.put("Inventory", inventory.serializeNBT());
-		compound.putInt("RecipeIndex", recipeIndex);
-		super.write(compound, clientPacket);
-
-		if (!clientPacket || playEvent.isEmpty())
-			return;
-		compound.put("PlayEvent", NBTSerializer.serializeNBT(playEvent));
-		playEvent = ItemStack.EMPTY;
-	}
-
-	@Override
-	protected void read(CompoundTag compound, boolean clientPacket) {
-		super.read(compound, clientPacket);
-		inventory.deserializeNBT(compound.getCompound("Inventory"));
-		recipeIndex = compound.getInt("RecipeIndex");
-		if (compound.contains("PlayEvent"))
-			playEvent = ItemStack.of(compound.getCompound("PlayEvent"));
-	}
-
-	@Override
-	protected AABB createRenderBoundingBox() {
-		return new AABB(worldPosition).inflate(.125f);
-	}
-
-	@Override
-	@Environment(EnvType.CLIENT)
-	public void tickAudio() {
-		super.tickAudio();
-		if (getSpeed() == 0)
-			return;
-
-		if (!playEvent.isEmpty()) {
-			spawnEventParticles(playEvent);
-			playEvent = ItemStack.EMPTY;
-			CVW_SoundEvents.VEHICLE_PARTS_MAKER_ACTIVATE.playAt(level, worldPosition, 3, 1, true);
-			return;
-		}
 	}
 
 	@Override
 	public void tick() {
 		super.tick();
+
 		if (getSpeed() == 0)
 			return;
 		if (inventory.remainingTime == -1) {
@@ -233,23 +181,30 @@ public class VehiclePartsMakerBlockEntity extends KineticBlockEntity implements 
 		level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
 		inventory.remainingTime = -1;
 		sendData();
-	} 
-
-	@Override
-	public void invalidate() {
-		super.invalidate();
 	}
 
 	@Override
-	public void destroy() {
-		super.destroy();
-		ItemHelper.dropContents(level, worldPosition, inventory);
-	}
+	@Environment(EnvType.CLIENT)
+	public void tickAudio() {
+		super.tickAudio();
+		if (getSpeed() == 0)
+			return;
 
-	@Nullable
-	@Override
-	public Storage<ItemVariant> getItemStorage(@Nullable Direction face) {
-		return face == Direction.DOWN ? null : inventory;
+		if (!playEvent.isEmpty()) {
+			boolean isWood = false;
+			Item item = playEvent.getItem();
+			if (item instanceof BlockItem) {
+				Block block = ((BlockItem) item).getBlock();
+				isWood = block.getSoundType(block.defaultBlockState()) == SoundType.WOOD;
+			}
+			spawnEventParticles(playEvent);
+			playEvent = ItemStack.EMPTY;
+			if (!isWood)
+				AllSoundEvents.SAW_ACTIVATE_STONE.playAt(level, worldPosition, 3, 1, true);
+			else
+				AllSoundEvents.SAW_ACTIVATE_WOOD.playAt(level, worldPosition, 3, 1, true);
+			return;
+		}
 	}
 
 	protected void spawnEventParticles(ItemStack stack) {
@@ -270,6 +225,17 @@ public class VehiclePartsMakerBlockEntity extends KineticBlockEntity implements 
 			Vec3 m = VecHelper.offsetRandomly(new Vec3(0, 0.25f, 0), r, .125f);
 			level.addParticle(particleData, v.x, v.y, v.z, m.x, m.y, m.y);
 		}
+	}
+
+	@Override
+	public void invalidate() {
+		super.invalidate();
+	}
+
+	@Override
+	public void destroy() {
+		super.destroy();
+		ItemHelper.dropContents(level, worldPosition, inventory);
 	}
 
 	protected void spawnParticles(ItemStack stack) {
@@ -298,7 +264,8 @@ public class VehiclePartsMakerBlockEntity extends KineticBlockEntity implements 
 	}
 
 	public Vec3 getItemMovementVec() {
-		boolean alongX = !getBlockState().getValue(VehiclePartsMakerBlock.AXIS_ALONG_FIRST_COORDINATE);
+		var dir = getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
+		boolean alongX = dir == Direction.NORTH || dir == Direction.SOUTH;
 		int offset = getSpeed() < 0 ? -1 : 1;
 		return new Vec3(offset * (alongX ? -1 : 0), 0, offset * (alongX ? 0 : 1));
 	}
@@ -313,14 +280,15 @@ public class VehiclePartsMakerBlockEntity extends KineticBlockEntity implements 
 		Recipe<?> recipe = recipes.get(recipeIndex);
 
 		int rolls = inventory.getStackInSlot(0)
-			.getCount();
+				.getCount();
 		inventory.clear();
 
 		List<ItemStack> list = new ArrayList<>();
 		for (int roll = 0; roll < rolls; roll++) {
-			List<ItemStack> results = new LinkedList<ItemStack>();
+			List<ItemStack> results = new LinkedList<>();
 			if (recipe instanceof PartsMakingRecipe)
 				results = ((PartsMakingRecipe) recipe).rollResults();
+
 			for (int i = 0; i < results.size(); i++) {
 				ItemStack stack = results.get(i);
 				ItemHelper.addToList(stack, list);
@@ -330,28 +298,25 @@ public class VehiclePartsMakerBlockEntity extends KineticBlockEntity implements 
 		for (int slot = 0; slot < list.size() && slot + 1 < inventory.getSlotCount(); slot++)
 			inventory.setStackInSlot(slot + 1, list.get(slot));
 
-		award(AllAdvancements.SAW_PROCESSING);
 	}
 
 	private List<? extends Recipe<?>> getRecipes() {
 		Optional<PartsMakingRecipe> assemblyRecipe = SequencedAssemblyRecipe.getRecipe(level, inventory.getStackInSlot(0),
-			CVW_RecipeTypes.PARTSMAKING.getType(), PartsMakingRecipe.class);
-		if (assemblyRecipe.isPresent() && filtering.test(assemblyRecipe.get()
-			.getResultItem(level.registryAccess())))
+				CVW_RecipeTypes.PARTS_MAKING_TYPE.get(), PartsMakingRecipe.class);
+		if (assemblyRecipe.isPresent())
 			return ImmutableList.of(assemblyRecipe.get());
 
-		Predicate<Recipe<?>> types = RecipeConditions.isOfType(CVW_RecipeTypes.PARTSMAKING.getType(),
-			AllConfigs.server().recipes.allowWoodcuttingOnSaw.get() ? woodcuttingRecipeType.get() : null);
+		Predicate<Recipe<?>> types = RecipeConditions.isOfType(CVW_RecipeTypes.PARTS_MAKING_TYPE.get());
 
-		List<Recipe<?>> startedSearch = RecipeFinder.get(partsmakingRecipesKey, level, types);
+		List<Recipe<?>> startedSearch = RecipeFinder.get(rollingRecipesKey, level, types);
 		return startedSearch.stream()
-			.filter(RecipeConditions.outputMatchesFilter(filtering))
-			.filter(RecipeConditions.firstIngredientMatches(inventory.getStackInSlot(0)))
-			.filter(r -> !CVW_RecipeTypes.shouldIgnoreInAutomation(r))
-			.collect(Collectors.toList());
+				.filter(RecipeConditions.firstIngredientMatches(inventory.getStackInSlot(0)))
+				.filter(r -> !AllRecipeTypes.shouldIgnoreInAutomation(r))
+				.collect(Collectors.toList());
 	}
 
 	public void insertItem(ItemEntity entity) {
+		//if (!canProcess()) return;
 		if (!inventory.isEmpty())
 			return;
 		if (!entity.isAlive())
@@ -372,6 +337,7 @@ public class VehiclePartsMakerBlockEntity extends KineticBlockEntity implements 
 	}
 
 	public void start(ItemStack inserted) {
+		//if (!canProcess()) return;
 		if (inventory.isEmpty())
 			return;
 		if (level.isClientSide && !isVirtual())
@@ -392,7 +358,6 @@ public class VehiclePartsMakerBlockEntity extends KineticBlockEntity implements 
 			recipeIndex++;
 			if (recipeIndex >= recipes.size())
 				recipeIndex = 0;
-			soundverifier = valid;
 		}
 
 		Recipe<?> recipe = recipes.get(recipeIndex);
@@ -404,10 +369,90 @@ public class VehiclePartsMakerBlockEntity extends KineticBlockEntity implements 
 		inventory.recipeDuration = inventory.remainingTime;
 		inventory.appliedRecipe = false;
 		sendData();
+	}
 
-		/*for (int i = 0; i < recipelist.size(); i++){
-			CVW_main.LOGGER.info(recipelist.get(i).toString());
-		} */
-		
+	private Direction getEjectDirection() {
+		var block = ((VehiclePartsMakerBlock) getBlockState().getBlock());
+		var speed = getSpeed();
+		block.getRotationAxis(getBlockState());
+		boolean rotation = speed >= 0;
+		Direction ejectDirection = Direction.UP;
+		switch (block.getRotationAxis(getBlockState())) {
+			case X -> {
+				ejectDirection = rotation ? Direction.SOUTH : Direction.NORTH;
+			}
+			case Z -> {
+				ejectDirection = rotation ? Direction.WEST : Direction.EAST;
+			}
+		}
+		return ejectDirection;
+	}
+
+
+	@Override
+	public void write(CompoundTag compound, boolean clientPacket) {
+
+		compound.put("Inventory", inventory.serializeNBT());
+		compound.putInt("RecipeIndex", recipeIndex);
+		super.write(compound, clientPacket);
+
+		if (!clientPacket || playEvent.isEmpty())
+			return;
+		compound.put("PlayEvent", NBTSerializer.serializeNBT(playEvent));
+		playEvent = ItemStack.EMPTY;
+	}
+	
+	@Override
+	protected void read(CompoundTag compound, boolean clientPacket) {
+
+		super.read(compound, clientPacket);
+		inventory.deserializeNBT(compound.getCompound("Inventory"));
+		recipeIndex = compound.getInt("RecipeIndex");
+		if (compound.contains("PlayEvent"))
+			playEvent = ItemStack.of(compound.getCompound("PlayEvent"));
+	}
+	
+	public int getProcessingSpeed() {
+		return Mth.clamp((int) Math.abs(getSpeed() / 16f), 1, 512);
+	}
+
+	@Nullable
+	@Override
+	public Storage<ItemVariant> getItemStorage(@Nullable Direction face) {
+		return inventory;
+	}
+
+	private boolean canProcess(ItemStack stack) {
+		ItemStackHandler tester = new ItemStackHandler(1);
+		var stack2 = playEvent;
+		tester.setStackInSlot(0, stack);
+		RecipeWrapper inventoryIn = new RecipeWrapper(tester);
+
+		var sequenced = SequencedAssemblyRecipe.getRecipe(level, stack, CVW_RecipeTypes.PARTS_MAKING_TYPE.get(), PartsMakingRecipe.class);
+		if(sequenced.isPresent()) {
+			return true;
+		}
+
+		assert level != null;
+		return find(inventoryIn, level)
+			.isPresent();
+	}
+
+	public Optional<PartsMakingRecipe> find(RecipeWrapper inv, Level world) {
+		var sequenced = SequencedAssemblyRecipe.getRecipe(level, inv.getItem(0), CVW_RecipeTypes.PARTS_MAKING_TYPE.get(), PartsMakingRecipe.class);
+		if(sequenced.isPresent()) {
+			return sequenced;
+		}
+		return world.getRecipeManager().getRecipeFor(CVW_RecipeTypes.PARTS_MAKING_TYPE.get(), inv, world);
+	}
+
+	public static int getProcessingDuration() {
+		return 120;//Config.ROLLING_MILL_PROCESSING_DURATION.get();
+	}
+
+	public float calculateStressApplied() {
+		/*float impact = Config.ROLLING_MILL_STRESS.get();
+		this.lastStressApplied = impact;*/
+		return 8;//impact;
 	}
 }

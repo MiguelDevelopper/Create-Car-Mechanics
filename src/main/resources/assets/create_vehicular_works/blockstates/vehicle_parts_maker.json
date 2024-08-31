@@ -1,98 +1,20 @@
 {
   "variants": {
-    "axis_along_first=false,facing=down,flipped=false": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/vertical",
-      "x": 180
-    },
-    "axis_along_first=false,facing=down,flipped=true": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/vertical",
-      "x": 180,
-      "y": 180
-    },
-    "axis_along_first=false,facing=east,flipped=false": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/horizontal",
+    "facing=north": {
+      "model": "create_vehicular_works:block/vehicle_parts_maker/block",
       "y": 270
     },
-    "axis_along_first=false,facing=east,flipped=true": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/horizontal",
-      "y": 270
+    "facing=south": {
+      "model": "create_vehicular_works:block/vehicle_parts_maker/block",
+      "y": 90
     },
-    "axis_along_first=false,facing=north,flipped=false": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/horizontal",
+    "facing=west": {
+      "model": "create_vehicular_works:block/vehicle_parts_maker/block",
       "y": 180
     },
-    "axis_along_first=false,facing=north,flipped=true": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/horizontal",
-      "y": 180
-    },
-    "axis_along_first=false,facing=south,flipped=false": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/horizontal"
-    },
-    "axis_along_first=false,facing=south,flipped=true": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/horizontal"
-    },
-    "axis_along_first=false,facing=up,flipped=false": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/vertical"
-    },
-    "axis_along_first=false,facing=up,flipped=true": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/vertical",
-      "y": 180
-    },
-    "axis_along_first=false,facing=west,flipped=false": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/horizontal",
-      "y": 90
-    },
-    "axis_along_first=false,facing=west,flipped=true": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/horizontal",
-      "y": 90
-    },
-    "axis_along_first=true,facing=down,flipped=false": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/vertical",
-      "x": 180,
-      "y": 270
-    },
-    "axis_along_first=true,facing=down,flipped=true": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/vertical",
-      "x": 180,
-      "y": 90
-    },
-    "axis_along_first=true,facing=east,flipped=false": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/horizontal",
-      "y": 270
-    },
-    "axis_along_first=true,facing=east,flipped=true": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/horizontal",
-      "y": 270
-    },
-    "axis_along_first=true,facing=north,flipped=false": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/horizontal",
-      "y": 180
-    },
-    "axis_along_first=true,facing=north,flipped=true": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/horizontal",
-      "y": 180
-    },
-    "axis_along_first=true,facing=south,flipped=false": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/horizontal"
-    },
-    "axis_along_first=true,facing=south,flipped=true": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/horizontal"
-    },
-    "axis_along_first=true,facing=up,flipped=false": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/vertical",
-      "y": 270
-    },
-    "axis_along_first=true,facing=up,flipped=true": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/vertical",
-      "y": 90
-    },
-    "axis_along_first=true,facing=west,flipped=false": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/horizontal",
-      "y": 90
-    },
-    "axis_along_first=true,facing=west,flipped=true": {
-      "model": "create_vehicular_works:block/vehicle_parts_maker/horizontal",
-      "y": 90
+    "facing=east": {
+      "model": "create_vehicular_works:block/vehicle_parts_maker/block",
+      "y": 0
     }
   }
 }

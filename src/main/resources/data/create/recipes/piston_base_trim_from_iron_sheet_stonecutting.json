@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:stonecutting",
+    "count": 1,
+    "ingredient": {
+      "item": "create:iron_sheet"
+    },
+    "result": "create_vehicular_works:piston_base_trim"
+  }

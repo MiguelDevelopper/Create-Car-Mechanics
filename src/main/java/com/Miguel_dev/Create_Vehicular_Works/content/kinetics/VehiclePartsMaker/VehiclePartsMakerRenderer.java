@@ -1,59 +1,81 @@
 package com.Miguel_dev.Create_Vehicular_Works.content.kinetics.VehiclePartsMaker;
 
+import com.Miguel_dev.Create_Vehicular_Works.CVW_main;
 import com.jozufozu.flywheel.backend.Backend;
-import com.jozufozu.flywheel.core.virtual.VirtualRenderWorld;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
-import com.simibubi.create.content.contraptions.behaviour.MovementContext;
-import com.simibubi.create.content.contraptions.render.ContraptionMatrices;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringRenderer;
-import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
+import com.simibubi.create.content.kinetics.saw.SawBlock;
+import com.simibubi.create.content.kinetics.saw.SawBlockEntity;
+import com.simibubi.create.foundation.render.CachedBufferer;
+import com.simibubi.create.foundation.render.SuperByteBuffer;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
-public class VehiclePartsMakerRenderer extends SafeBlockEntityRenderer<VehiclePartsMakerBlockEntity> {
+
+public class VehiclePartsMakerRenderer extends KineticBlockEntityRenderer<VehiclePartsMakerBlockEntity> {
 
 	public VehiclePartsMakerRenderer(BlockEntityRendererProvider.Context context) {
+		super(context);
 	}
-
+	
 	@Override
-	protected void renderSafe(VehiclePartsMakerBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light,
-		int overlay) {
-		renderItems(be, partialTicks, ms, buffer, light, overlay);
-		FilteringRenderer.renderOnBlockEntity(be, partialTicks, ms, buffer, light, overlay);
-
-		if (Backend.canUseInstancing(be.getLevel()))
-			return;
-
-		renderShaft(be, ms, buffer, light, overlay);
+	protected BlockState getRenderedBlockState(VehiclePartsMakerBlockEntity te) {
+		return shaft(getRotationAxisOf(te));
 	}
-
-
-	protected void renderShaft(VehiclePartsMakerBlockEntity be, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
-		KineticBlockEntityRenderer.renderRotatingBuffer(be, null, ms,
-			buffer.getBuffer(RenderType.solid()), light);
+	
+	@Override
+	protected void renderSafe(VehiclePartsMakerBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
+			int light, int overlay) {
+		renderItems(be, partialTicks, ms, buffer, light, overlay);
+		super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
+		if(Backend.canUseInstancing(be.getLevel())) return;
+		BlockState blockState = be.getBlockState();
+		BlockPos pos = be.getBlockPos();
+		
+		VertexConsumer vb = buffer.getBuffer(RenderType.solid());
+		
+		int packedLightmapCoords = LevelRenderer.getLightColor(be.getLevel(), pos);
+		// SuperByteBuffer shaft = AllBlockPartials.SHAFT_HALF.renderOn(blockState);
+		SuperByteBuffer shaft =  CachedBufferer.partial(AllPartialModels.SHAFT_HALF, blockState);
+		Axis axis = getRotationAxisOf(be);
+		
+		shaft
+			.rotateCentered(Direction.UP, axis == Axis.Z ? 0 : 90*(float)Math.PI/180f)
+			.translate(0, 4f/16f, 0)
+			.rotateCentered(Direction.NORTH, getAngleForTe(be, pos, axis))
+			.light(packedLightmapCoords)
+			.renderInto(ms, vb);
+		
+		shaft
+			.rotateCentered(Direction.UP, axis == Axis.Z ? 180*(float)Math.PI/180f : 270*(float)Math.PI/180f)
+			.translate(0, 4f/16f, 0)
+			.rotateCentered(Direction.NORTH, -getAngleForTe(be, pos, axis))
+			.light(packedLightmapCoords)
+			.renderInto(ms, vb);
 	}
 
 	protected void renderItems(VehiclePartsMakerBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
 		int light, int overlay) {
-		boolean processingMode = be.getBlockState()
-			.getValue(VehiclePartsMakerBlock.FACING) == Direction.UP;
-		if (processingMode && !be.inventory.isEmpty()) {
-			boolean alongZ = !be.getBlockState()
-				.getValue(VehiclePartsMakerBlock.AXIS_ALONG_FIRST_COORDINATE);
+		if (!be.inventory.isEmpty()) {
+			boolean alongZ = be.getBlockState().getValue(VehiclePartsMakerBlock.HORIZONTAL_FACING) == Direction.SOUTH || be.getBlockState().getValue(VehiclePartsMakerBlock.HORIZONTAL_FACING) == Direction.NORTH;
 			ms.pushPose();
 
 			boolean moving = be.inventory.recipeDuration != 0;
@@ -69,11 +91,9 @@ public class VehiclePartsMakerRenderer extends SafeBlockEntityRenderer<VehiclePa
 
 			if (be.getSpeed() == 0)
 				offset = .5f;
-			if (be.getSpeed() < 0 ^ alongZ)
+			if (be.getSpeed() < 0 == alongZ) // Changed from ^ to ==
 				offset = 1 - offset;
 			
-			offset = (-offset + 1);
-
 			for (int i = 0; i < be.inventory.getSlotCount(); i++) {
 				ItemStack stack = be.inventory.getStackInSlot(i);
 				if (stack.isEmpty())
@@ -88,29 +108,14 @@ public class VehiclePartsMakerRenderer extends SafeBlockEntityRenderer<VehiclePa
 
 				ms.scale(.5f, .5f, .5f);
 				if (alongZ)
-					ms.mulPose(Axis.YP.rotationDegrees(90));
-				ms.mulPose(Axis.XP.rotationDegrees(90));
-				itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, light, overlay, ms, buffer, be.getLevel(), 0);
+					ms.mulPose(com.mojang.math.Axis.YP.rotationDegrees(90));
+				ms.mulPose(com.mojang.math.Axis.XP.rotationDegrees(90));
+				itemRenderer.render(stack, ItemDisplayContext.FIXED, false, ms, buffer, light, overlay, modelWithOverrides);
 				break;
 			}
 
 			ms.popPose();
 		}
-	}
-
-	
-
-	protected BlockState getRenderedBlockState(KineticBlockEntity be) {
-		return KineticBlockEntityRenderer.shaft(KineticBlockEntityRenderer.getRotationAxisOf(be));
-	}
-
-	public static void renderInContraption(MovementContext context, VirtualRenderWorld renderWorld,
-		ContraptionMatrices matrices, MultiBufferSource buffer) {
-
-	    Vec3 facingVec = Vec3.atLowerCornerOf(context.state.getValue(VehiclePartsMakerBlock.FACING)
-			.getNormal());
-		facingVec = context.rotation.apply(facingVec);
-		
 	}
 
 }

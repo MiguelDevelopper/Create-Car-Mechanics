@@ -1,0 +1,13 @@
+{
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "item" : "create_vehicular_works:piston_base_trim"
+    }
+  ],
+  "results": [
+    {
+      "item": "create_vehicular_works:piston_base"
+    }
+  ]
+}

@@ -14,6 +14,8 @@ public class CVW_CreativeTabs {
             .icon(() -> CVW_Blocks.VEHICLE_PARTS_MAKER.asStack())
             .displayItems((displayContext, entries) -> {
                 entries.accept(CVW_Blocks.VEHICLE_PARTS_MAKER);
+                entries.accept(CVW_Items.PISTON_BASE_TRIM);
+                entries.accept(CVW_Items.PISTON_HEAD_TRIM);
                 entries.accept(CVW_Items.PISTON_BASE);
                 entries.accept(CVW_Items.PISTON_BODY);
                 entries.accept(CVW_Items.PISTON_HEAD);

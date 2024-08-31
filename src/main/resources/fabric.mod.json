@@ -11,7 +11,7 @@
     "sources": "https://github.com/Fabricators-of-Create/create-fabric-addon-template"
   },
   "license": "CC0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/create_vehicular_works/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -22,6 +22,9 @@
     ],
     "fabric-datagen": [
       "com.Miguel_dev.Create_Vehicular_Works.CVW_datagenerator"
+    ],
+    "jei_mod_plugin": [
+      "com.Miguel_dev.Create_Vehicular_Works.compat.jei.CVW_Jei"
     ]
   },
   "mixins": [
